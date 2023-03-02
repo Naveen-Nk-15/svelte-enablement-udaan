@@ -165,7 +165,7 @@ roundWayTimeFilter.subscribe( value =>{
 })
 
 priceRange.subscribe( value =>{
-    console.log("checking companies" + value);
+    // console.log("checking companies" + value);
    let oneWayResultFlight = get(oneWayFlights);
    let roundTripResultFlights = get(roundTripFlights);
    priceFilter(oneWayResultFlight,value,false);
