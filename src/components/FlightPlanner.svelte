@@ -16,12 +16,17 @@
     let roundWayDate= get(returnDate);
     let oneWaySelector = true;
     let cityList = [];
+    let cityCode = [];
     let disable = true;
-    cities.subscribe( val => cityList = val)
+    cities.subscribe( val => {
+        cityList = val;
+        cityCode = getCities(cityList);
+    })
+    cityCode = getCities(cityList);
+    $: console.log(cityList);
     isRoundTrip.subscribe( val => oneWaySelector = !val )
     $:disable = !(oneWayDate != "" && (!oneWaySelector? roundWayDate != "" : true) && from != "" && to != "");
     const getData = () =>{
-        getResultFlights(oneWayDate,roundWayDate,from,to,oneWaySelector);
         fromLocation.set(from);
         toLocation.set(to);
         depatureDate.set(oneWayDate)
@@ -34,9 +39,9 @@
         isRoundTrip.update(val=> !oneWaySelector)
     }
     const switchLocation = () =>{
-        let t = from;
+        let temp = from;
         from = to;
-        to = t;
+        to = temp;
     }
 </script>
 
@@ -48,13 +53,13 @@
     <div class="planner-wrapper">
         <div class="planner">
             <div class="contain">
-                <Destination bind:selected={from} label={"From"} locations={getCities(cityList)}/>
+                <Destination bind:selected={from} label={"From"} locations={cityCode}/>
             </div>
             <div class="swap" on:mousedown={switchLocation}>
                 <ion-icon name="swap-horizontal-outline"></ion-icon>
             </div>
             <div class="contain">
-                <Destination bind:selected={to} label={"Destination"} locations={getCities(cityList)}/>    
+                <Destination bind:selected={to} label={"Destination"} locations={cityCode}/>    
             </div>
             <div class="contain">
                 <Calendar bind:date={oneWayDate} label={"Departure"} />    

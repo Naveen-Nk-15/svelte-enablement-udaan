@@ -1,39 +1,23 @@
+<script context="module">
+	export function preload(page){
+		return this.fetch("http://localhost:3001/cities")
+		.then(response => response.json())
+		.then(data => {
+			// console.log(data+"in server");
+			return {cityData : data};
+		}).catch(error => {
+			console.log(error);
+			return [];
+		});
+	}
+</script>
 <script>
     import FlightPlanner from "../components/FlightPlanner.svelte";
-	import { cities, availableFlights } from "../stores/Flights.store";
-	import { onMount } from "svelte";
-	onMount(async () => {
-		fetch("https://run.mocky.io/v3/8b1d2b79-0b1f-4f9f-bd56-17c5aad99ac5",{
-			headers:{
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Credentials': 'true',
-				'Access-Control-Allow-Headers':'*'
-			}
-		})
-		.then(response => response.json())
-		.then(data => {
-			console.log(data);
-			cities.set(data)
-		}).catch(error => {
-			console.log(error);
-			return [];
-		});
-		fetch("https://run.mocky.io/v3/6229c6e5-4d44-4d1b-8060-78a5160e13f6",{
-			headers:{
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Credentials': 'true',
-				'Access-Control-Allow-Headers':'*'
-			}
-		})
-		.then(response => response.json())
-		.then(data => {
-			console.log(data);
-			availableFlights.set(data)
-		}).catch(error => {
-			console.log(error);
-			return [];
-		});
-	});
+	import {cities} from "../stores/Flights.store";
+	export let cityData;
+	
+	cities.set(cityData.cities);
+	
 </script>
 
 <div class="wrapper">

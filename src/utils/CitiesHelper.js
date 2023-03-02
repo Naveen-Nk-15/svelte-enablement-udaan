@@ -1,6 +1,7 @@
 export const getCities = (cities) =>{
     let data = []
-    if(cities.length == 0)
+    console.log(data + "in helper");
+    if(cities.length==0)
         return [];
     for(let i of cities)
     {

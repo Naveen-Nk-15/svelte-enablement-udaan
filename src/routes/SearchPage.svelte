@@ -1,4 +1,20 @@
+<script context="module">
+    export function preload(){
+		return this.fetch("http://localhost:3001/flights")
+		.then(response => response.json())
+		.then(data => {
+			console.log("server side rendering starts");
+			return {flightData : data};
+		}).catch(error => {
+			console.log(error);
+			return [];
+		});
+	}
+</script>
+
+
 <script>
+    import { get } from 'svelte/store'
     import { onMount } from "svelte";
     import { cities, availableFlights } from "../stores/Flights.store";
     import FlightTable from "../components/FlightTable.svelte";
@@ -10,15 +26,22 @@
     import Header from '../components/Header.svelte';
     import {CONSTANTS} from "../constants/constants";
     import Button from '../components/Button.svelte';
-    import { isRoundTrip } from '../stores/Flights.store';
     import OfferModal from '../components/OfferModal.svelte';
     import { getResultFlights } from '../utils/FlightFilter.util';
+    import {isRoundTrip,fromLocation,toLocation,returnDate,depatureDate} from "../stores/Flights.store";
     import Slider from "../components/Slider.svelte";
+    export let flightData;
     let oneWay = []
     let roundWay = []
     let priceRanges = []
     let flightCompaniesNames;
     let offerPopup = false;
+    
+    onMount(()=>{
+        availableFlights.set(flightData.flights);
+        console.log(get(availableFlights));
+        getResultFlights(get(depatureDate),get(returnDate),get(fromLocation),get(toLocation),!get(isRoundTrip));
+    })
     
     const closeOffer = () =>{
         offerPopup = !offerPopup;
